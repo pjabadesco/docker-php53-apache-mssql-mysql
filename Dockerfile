@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get update 
 
 RUN apt-get install -y \
-    wget apache2 libapache2-mod-php53 apache2-mpm-prefork postfix 
+    wget apache2 libapache2-mod-php53 apache2-mpm-prefork postfix curl zip
 
 # RUN apt-get install -y \
 #     php53-common \
@@ -117,12 +117,16 @@ RUN apt-get install -y \
     php53-pecl \
     php53-phar 
 
-# RUN apt-get install -y \
-#     curl \
-#     unixodbc \
-#     unixodbc-dev 
-# # php53-odbc \
-# # php53-mod-pdf
+RUN set -ex && \
+    wget https://github.com/Distrotech/PDFlib-Lite/archive/refs/heads/master.zip && \
+    unzip master.zip && cd PDFlib*master && \
+    ./configure && make && make install && \
+    wget http://pecl.php.net/get/pdflib-2.1.8.tgz && \
+    tar -zxf pdflib-2.1.8.tgz && \
+    mv pdflib-2.1.8 pdflib-pecl-2.1.8 && \
+    cd pdflib-pecl-2.1.8 && \
+    phpize && ./configure --with-pdflib && make && make install && \
+    sudo ldconfig
 
 RUN mkdir -p /var/lock/apache2 && mkdir -p /var/run/apache2 \
     && a2dismod mpm_event && a2enmod mpm_prefork
@@ -140,7 +144,7 @@ RUN chmod +x /usr/local/bin/run && \
 ADD conf/php.ini /etc/php53/apache2/php.ini
 COPY conf.d/ /etc/php53/apache2/conf.d/
 
-ADD conf/libpdf_php.so /usr/lib/php53/extensions/
+# ADD conf/libpdf_php.so /usr/lib/php53/extensions/
 
 RUN chmod 755 /var/www/html -R && \
     rm /var/www/html/index.html
