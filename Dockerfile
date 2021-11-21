@@ -136,7 +136,7 @@ COPY conf/run /usr/local/bin/run
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN chmod +x /usr/local/bin/run && \
-    a2enmod rewrite php53 && \
+    a2enmod rewrite php53 remoteip && \
     rm -rf /etc/php53/cli/conf.d /etc/php53/apache2/conf.d && \
     ln -s /etc/php53/conf.d /etc/php53/cli/conf.d && \
     ln -s /etc/php53/conf.d /etc/php53/apache2/conf.d
