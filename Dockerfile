@@ -1,14 +1,14 @@
 FROM ubuntu:14.04
 
 RUN apt-get update && \
-    apt-get install -y python-software-properties software-properties-common && \
+    apt-get install -y python-software-properties software-properties-common curl && \
     add-apt-repository -y ppa:sergey-dryabzhinsky/php53 && \
     add-apt-repository -y ppa:sergey-dryabzhinsky/packages && \
     add-apt-repository -y ppa:sergey-dryabzhinsky/php-modules && \
     apt-get update 
 
 RUN apt-get install -y \
-    wget apache2 libapache2-mod-php53 apache2-mpm-prefork postfix curl zip
+    wget apache2 libapache2-mod-php53 apache2-mpm-prefork postfix zip
 
 # RUN apt-get install -y \
 #     php53-common \
@@ -74,7 +74,7 @@ RUN apt-get install -y \
     php53-mod-mcrypt \
     php53-mod-memcache \
     # php53-mod-memcached  \
-    # php53-mod-mongo \
+    php53-mod-mongo \
     php53-mod-mssql  \
     php53-mod-mysql \
     # php53-mod-mysqlnd \
